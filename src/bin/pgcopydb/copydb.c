@@ -429,6 +429,7 @@ copydb_init_specs(CopyDataSpec *specs,
 				  char *snapshot,
 				  RestoreOptions restoreOptions,
 				  bool skipLargeObjects,
+				  bool analyzeOnly,
 				  bool restart,
 				  bool resume)
 {
@@ -450,6 +451,7 @@ copydb_init_specs(CopyDataSpec *specs,
 		.section = section,
 		.restoreOptions = restoreOptions,
 		.skipLargeObjects = skipLargeObjects,
+		.analyzeOnly = analyzeOnly,
 
 		.restart = restart,
 		.resume = resume,
@@ -547,6 +549,7 @@ copydb_init_table_specs(CopyTableDataSpec *tableSpecs,
 
 		.tableJobs = specs->tableJobs,
 		.indexJobs = specs->indexJobs,
+		.analyzeOnly = specs->analyzeOnly,
 		.indexSemaphore = &(specs->indexSemaphore)
 	};
 
@@ -830,7 +833,8 @@ copydb_start_vacuum_table(CopyTableDataSpec *tableSpecs)
 			char vacuum[BUFSIZE] = { 0 };
 
 			sformat(vacuum, sizeof(vacuum),
-					"VACUUM ANALYZE %s",
+					tableSpecs->analyzeOnly ? "VACUUM " : "" 
+				      	"ANALYZE %s",
 					tableSpecs->qname);
 
 			log_info("%s;", vacuum);

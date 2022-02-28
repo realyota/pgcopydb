@@ -147,6 +147,7 @@ typedef struct CopyTableDataSpec
 
 	int tableJobs;
 	int indexJobs;
+	bool analyzeOnly;
 	Semaphore *indexSemaphore;  /* pointer to the main specs semaphore */
 
 	TableFilePaths tablePaths;
@@ -176,6 +177,7 @@ typedef struct CopyDataSpec
 	CopyDataSection section;
 	RestoreOptions restoreOptions;
 	bool skipLargeObjects;
+	bool analyzeOnly;
 
 	bool restart;
 	bool resume;
@@ -224,6 +226,7 @@ bool copydb_init_specs(CopyDataSpec *specs,
 					   char *snapshot,
 					   RestoreOptions restoreOptions,
 					   bool skipLargeObjects,
+					   bool analyzeOnly,
 					   bool restart,
 					   bool resume);
 

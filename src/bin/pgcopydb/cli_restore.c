@@ -360,6 +360,7 @@ cli_restore_prepare_specs(CopyDataSpec *copySpecs)
 						   NULL, /* source database snapshot */
 						   restoreDBoptions.restoreOptions,
 						   false, /* skipLargeObjects */
+						   restoreDBoptions.analyzeOnly,
 						   restoreDBoptions.restart,
 						   restoreDBoptions.resume))
 	{

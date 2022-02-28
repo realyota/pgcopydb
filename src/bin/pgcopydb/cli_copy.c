@@ -49,6 +49,7 @@ CommandLine copy__db_command =
 		"  --no-acl              Prevent restoration of access privileges (grant/revoke commands).\n"
 		"  --no-comments         Do not output commands to restore comments\n"
 		"  --skip-large-objects  Skip copying large objects (blobs)\n"
+		"  --analyze-only        Do ANALYZE only instead of VACUUM ANALYZE\n"
 		"  --restart             Allow restarting when temp files exist already\n"
 		"  --resume              Allow resuming operations after a failure\n"
 		"  --not-consistent      Allow taking a new snapshot on the source database\n"
@@ -71,6 +72,7 @@ static CommandLine copy_db_command =
 		"  --no-acl              Prevent restoration of access privileges (grant/revoke commands).\n"
 		"  --no-comments         Do not output commands to restore comments\n"
 		"  --skip-large-objects  Skip copying large objects (blobs)\n"
+		"  --analyze-only        Do ANALYZE only instead of VACUUM ANALYZE\n"
 		"  --restart             Allow restarting when temp files exist already\n"
 		"  --resume              Allow resuming operations after a failure\n"
 		"  --not-consistent      Allow taking a new snapshot on the source database\n"
@@ -93,6 +95,7 @@ static CommandLine copy_data_command =
 		"  --table-jobs          Number of concurrent COPY jobs to run\n"
 		"  --index-jobs          Number of concurrent CREATE INDEX jobs to run\n"
 		"  --skip-large-objects  Skip copying large objects (blobs)\n"
+		"  --analyze-only        Do ANALYZE only instead of VACUUM ANALYZE\n"
 		"  --restart             Allow restarting when temp files exist already\n"
 		"  --resume              Allow resuming operations after a failure\n"
 		"  --not-consistent      Allow taking a new snapshot on the source database\n"
@@ -199,6 +202,7 @@ cli_copy_db_getopts(int argc, char **argv)
 		{ "no-acl", no_argument, NULL, 'x' }, /* pg_restore -x */
 		{ "skip-blobs", no_argument, NULL, 'B' },
 		{ "skip-large-objects", no_argument, NULL, 'B' },
+		{ "analyze-only", no_argument, NULL, 'A' },
 		{ "restart", no_argument, NULL, 'r' },
 		{ "resume", no_argument, NULL, 'R' },
 		{ "not-consistent", no_argument, NULL, 'C' },
@@ -321,7 +325,11 @@ cli_copy_db_getopts(int argc, char **argv)
 				log_trace("--skip-large-objects");
 				break;
 			}
-
+			case 'A':
+			{
+				options.analyzeOnly = true;
+				log_trace("--analyze-only");
+			}
 			case 'r':
 			{
 				options.restart = true;
@@ -819,6 +827,7 @@ cli_copy_prepare_specs(CopyDataSpec *copySpecs, CopyDataSection section)
 						   copyDBoptions.snapshot,
 						   copyDBoptions.restoreOptions,
 						   copyDBoptions.skipLargeObjects,
+						   copyDBoptions.analyzeOnly,
 						   copyDBoptions.restart,
 						   copyDBoptions.resume))
 	{

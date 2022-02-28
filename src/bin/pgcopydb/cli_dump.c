@@ -303,6 +303,7 @@ cli_dump_schema_section(CopyDBOptions *dumpDBoptions,
 						   dumpDBoptions->snapshot,
 						   restoreOptions,
 						   false, /* skipLargeObjects */
+						   dumpDBoptions->analyzeOnly,
 						   dumpDBoptions->restart,
 						   dumpDBoptions->resume))
 	{
