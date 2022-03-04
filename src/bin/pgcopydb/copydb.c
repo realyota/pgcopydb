@@ -833,8 +833,7 @@ copydb_start_vacuum_table(CopyTableDataSpec *tableSpecs)
 			char vacuum[BUFSIZE] = { 0 };
 
 			sformat(vacuum, sizeof(vacuum),
-					tableSpecs->analyzeOnly ? "VACUUM " : "" 
-				      	"ANALYZE %s",
+					tableSpecs->analyzeOnly ? "ANALYZE %s" : "VACUUM ANALYZE %s",
 					tableSpecs->qname);
 
 			log_info("%s;", vacuum);
